@@ -22,3 +22,16 @@ docker-compose up --build
 ```
 
 Сервис доступен на `http://localhost:8080`
+
+## API Endpoints
+
+| Метод | Путь | Описание |
+|-------|------|----------|
+| POST | `/team/add` | Создать команду с участниками |
+| GET | `/team/get?team_name=...` | Получить команду |
+| POST | `/users/setIsActive` | Изменить активность пользователя |
+| GET | `/users/getReview?user_id=...` | Получить PR пользователя |
+| POST | `/pullRequest/create` | Создать PR с автоназначением ревьюверов |
+| POST | `/pullRequest/merge` | Merge PR (идемпотентно) |
+| POST | `/pullRequest/reassign` | Переназначить ревьювера |
+| GET | `/health` | Health check |
