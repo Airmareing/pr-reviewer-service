@@ -186,19 +186,11 @@ func (s *Service) assignReviewers(teamName, excludeUserID string, maxCount int) 
 }
 
 func (s *Service) MergePullRequest(prID string) (*models.PullRequest, error) {
-	pr, err := s.storage.GetPullRequest(prID)
-	if err != nil {
-		return nil, &ServiceError{
-			Code:    "NOT_FOUND",
-			Message: "pull request not found",
-		}
-	}
-	
 	if err := s.storage.MergePullRequest(prID); err != nil {
 		return nil, err
 	}
 	
-	pr, err = s.storage.GetPullRequest(prID)
+	pr, err := s.storage.GetPullRequest(prID)
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"pr-reviewer-service/internal/models"
 	"pr-reviewer-service/internal/service"
+	"log"
 )
 
 type Controller struct {
@@ -20,7 +21,9 @@ func NewController(service *service.Service) *Controller {
 func (c *Controller) respondJSON(w http.ResponseWriter, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		log.Printf("Failed to encode JSON response: %v", err)
+	}
 }
 
 func (c *Controller) respondError(w http.ResponseWriter, status int, code, message string) {

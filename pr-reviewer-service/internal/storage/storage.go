@@ -3,6 +3,7 @@ package storage
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"pr-reviewer-service/internal/models"
 
 	_ "github.com/lib/pq"
@@ -104,7 +105,11 @@ func (s *PostgresStorage) GetTeam(teamName string) (*models.TeamResponse, error)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team members: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("Failed to close rows: %v", err)
+		}
+	}()
 	
 	var members []models.TeamMember
 	for rows.Next() {
@@ -206,7 +211,11 @@ func (s *PostgresStorage) GetActiveTeamMembers(teamName string, excludeUserID st
 	if err != nil {
 		return nil, fmt.Errorf("failed to get active team members: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("Failed to close rows: %v", err)
+		}
+	}()
 	
 	var users []models.User
 	for rows.Next() {
@@ -363,7 +372,11 @@ func (s *PostgresStorage) GetReviewers(prID string) ([]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get reviewers: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("Failed to close rows: %v", err)
+		}
+	}()
 	
 	var reviewers []string
 	for rows.Next() {
@@ -414,7 +427,11 @@ func (s *PostgresStorage) GetPRsByReviewer(userID string) ([]models.PullRequestS
 	if err != nil {
 		return nil, fmt.Errorf("failed to get PRs by reviewer: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("Failed to close rows: %v", err)
+		}
+	}()
 	
 	var prs []models.PullRequestShort
 	for rows.Next() {
